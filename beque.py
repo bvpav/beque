@@ -11,6 +11,11 @@ else:
 program = re.sub(r'#.*\n', '', program)
 program = program.split()
 
+labels = {}
+for i, instruction in enumerate(program):
+    if instruction.endswith(':'):
+        labels[instruction[:-1]] = i + 1
+
 deque = collections.deque()
 
 
@@ -64,7 +69,6 @@ def print_func(is_left):
 
 ip = 0
 while ip < len(program):
-    print(deque)
     instruction = program[ip]
     if instruction.startswith('.'):
         is_left = True
@@ -72,16 +76,22 @@ while ip < len(program):
     elif instruction.endswith('.'):
         is_left = False
         instruction = instruction[:-1]
+    elif instruction.endswith(':'):
+        ip += 1
+        continue
     else:
         raise RuntimeError(f'missing position at {ip}: {instruction!r}')
 
-    print(f'{ip=} {instruction=} {is_left=}')
+    print(f'{ip=} {instruction=} {is_left=} {deque=}')
 
     if instruction.isnumeric():
         push(is_left, int(instruction))
     elif instruction in funcs:
         funcs[instruction](is_left)
+    elif instruction == 'jmp':
+        ip = pop(is_left)
+        continue
     else:
-        raise NameError(instruction)
+        push(is_left, labels[instruction])
 
     ip += 1
