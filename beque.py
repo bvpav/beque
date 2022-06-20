@@ -56,9 +56,37 @@ def add(is_left):
 
 @func('-')
 def sub(is_left):
-    a = pop(is_left)
     b = pop(is_left)
-    push(is_left, b - a)
+    a = pop(is_left)
+    push(is_left, a - b)
+
+
+@func('=')
+def eq(is_left):
+    b = pop(is_left)
+    a = pop(is_left)
+    push(is_left, 1 if a == b else 0)
+
+
+@func('<')
+def lt(is_left):
+    b = pop(is_left)
+    a = pop(is_left)
+    push(is_left, 1 if a < b else 0)
+
+
+@func('>')
+def gt(is_left):
+    b = pop(is_left)
+    a = pop(is_left)
+    push(is_left, 1 if a > b else 0)
+
+
+@func
+def dup(is_left):
+    val = pop(is_left)
+    push(is_left, val)
+    push(is_left, val)
 
 
 @func('print')
@@ -91,6 +119,12 @@ while ip < len(program):
     elif instruction == 'jmp':
         ip = pop(is_left)
         continue
+    elif instruction == 'jmpif':
+        label = pop(is_left)
+        condition = pop(is_left)
+        if condition != 0:
+            ip = label
+            continue
     else:
         push(is_left, labels[instruction])
 
