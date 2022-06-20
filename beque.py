@@ -19,5 +19,7 @@ while ip < len(program):
     elif instruction.endswith('.'):
         left = True
         instruction = instruction[:-1]
+    else:
+        raise RuntimeError(f'missing position at {ip}: {instruction!r}')
     print(f'{ip=} {instruction=} {left=}')
     ip += 1
