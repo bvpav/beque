@@ -14,15 +14,15 @@ program = program.split()
 deque = collections.deque()
 
 
-def push(left: bool, value):
-    if left:
+def push(is_left: bool, value):
+    if is_left:
         deque.appendleft(value)
     else:
         deque.append(value)
 
 
-def pop(left: bool):
-    if left:
+def pop(is_left: bool):
+    if is_left:
         return deque.popleft()
     else:
         return deque.pop()
@@ -43,22 +43,22 @@ def func(f_or_name):
 
 
 @func('+')
-def add(left):
-    a = pop(left)
-    b = pop(left)
-    push(left, a + b)
+def add(is_left):
+    a = pop(is_left)
+    b = pop(is_left)
+    push(is_left, a + b)
 
 
 @func('-')
-def sub(left):
-    a = pop(left)
-    b = pop(left)
-    push(left, b - a)
+def sub(is_left):
+    a = pop(is_left)
+    b = pop(is_left)
+    push(is_left, b - a)
 
 
 @func('print')
-def print_func(left):
-    value = pop(left)
+def print_func(is_left):
+    value = pop(is_left)
     print(value)
 
 
@@ -67,20 +67,20 @@ while ip < len(program):
     print(deque)
     instruction = program[ip]
     if instruction.startswith('.'):
-        left = True
+        is_left = True
         instruction = instruction[1:]
     elif instruction.endswith('.'):
-        left = False
+        is_left = False
         instruction = instruction[:-1]
     else:
         raise RuntimeError(f'missing position at {ip}: {instruction!r}')
 
-    print(f'{ip=} {instruction=} {left=}')
+    print(f'{ip=} {instruction=} {is_left=}')
 
     if instruction.isnumeric():
-        push(left, int(instruction))
+        push(is_left, int(instruction))
     elif instruction in funcs:
-        funcs[instruction](left)
+        funcs[instruction](is_left)
     else:
         raise NameError(instruction)
 
