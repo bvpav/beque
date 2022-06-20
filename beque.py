@@ -10,4 +10,14 @@ else:
 program = re.sub(r'#.*\n', '', program)
 program = program.split()
 
-print(repr(program))
+ip = 0
+while ip < len(program):
+    instruction = program[ip]
+    if instruction.startswith('.'):
+        left = False
+        instruction = instruction[1:]
+    elif instruction.endswith('.'):
+        left = True
+        instruction = instruction[:-1]
+    print(f'{ip=} {instruction=} {left=}')
+    ip += 1
