@@ -62,6 +62,12 @@ def sub(is_left):
     push(is_left, a - b)
 
 
+@func('++')
+def inc(is_left):
+    a = pop(is_left)
+    push(is_left, a + 1)
+
+
 @func('--')
 def dec(is_left):
     a = pop(is_left)
@@ -87,6 +93,20 @@ def gt(is_left):
     b = pop(is_left)
     a = pop(is_left)
     push(is_left, 1 if a > b else 0)
+
+
+@func('<=')
+def lte(is_left):
+    b = pop(is_left)
+    a = pop(is_left)
+    push(is_left, 1 if a <= b else 0)
+
+
+@func('>=')
+def gte(is_left):
+    b = pop(is_left)
+    a = pop(is_left)
+    push(is_left, 1 if a >= b else 0)
 
 
 @func
@@ -140,7 +160,7 @@ while ip < len(program):
     else:
         raise RuntimeError(f'missing direction at {ip}: {instruction!r}')
 
-    print(f'{ip=} {instruction=} {is_left=} {deque=}')
+    print(f'{ip=} {instruction=} {is_left=} {deque=}', file=sys.stderr)
 
     if instruction.isnumeric():
         push(is_left, int(instruction))
