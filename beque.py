@@ -1,4 +1,5 @@
 import collections
+import functools
 import re
 import sys
 
@@ -38,6 +39,13 @@ def func(f_or_name):
         return inner(f_or_name, f_or_name.__name__)
 
     return lambda f: inner(f, f_or_name)
+
+
+def special_case(f):
+    @functools.wraps(f)
+    def error(is_left):
+        raise RuntimeError(f'special case {f.__name__!r} not handled')
+    return error
 
 
 @func('+')
@@ -94,6 +102,18 @@ def print_func(is_left):
     print(value)
 
 
+@func
+@special_case
+def jmp(is_left):
+    pass
+
+
+@func
+@special_case
+def jmpif(is_left):
+    pass
+
+
 labels = {}
 for i, instruction in enumerate(program):
     if instruction.endswith(':'):
@@ -124,8 +144,6 @@ while ip < len(program):
 
     if instruction.isnumeric():
         push(is_left, int(instruction))
-    elif instruction in funcs:
-        funcs[instruction](is_left)
     elif instruction == 'jmp':
         ip = pop(is_left)
         continue
@@ -135,6 +153,8 @@ while ip < len(program):
         if condition != 0:
             ip = label
             continue
+    elif instruction in funcs:
+        funcs[instruction](is_left)
     else:
         push(is_left, labels[instruction])
 
