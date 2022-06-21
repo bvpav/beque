@@ -11,13 +11,6 @@ else:
 program = re.sub(r'#.*\n', '', program)
 program = program.split()
 
-labels = {}
-for i, instruction in enumerate(program):
-    if instruction.endswith(':'):
-        labels[instruction[:-1]] = i + 1
-
-deque = collections.deque()
-
 
 def push(is_left: bool, value):
     if is_left:
@@ -61,6 +54,12 @@ def sub(is_left):
     push(is_left, a - b)
 
 
+@func('--')
+def dec(is_left):
+    a = pop(is_left)
+    push(is_left, a - 1)
+
+
 @func('=')
 def eq(is_left):
     b = pop(is_left)
@@ -95,6 +94,17 @@ def print_func(is_left):
     print(value)
 
 
+labels = {}
+for i, instruction in enumerate(program):
+    if instruction.endswith(':'):
+        label = instruction[:-1]
+        if label in funcs:
+            raise RuntimeError(
+                    f'label {label!r} at position {i} shadows builtin name {label!r}')
+        labels[label] = i + 1
+
+deque = collections.deque()
+
 ip = 0
 while ip < len(program):
     instruction = program[ip]
@@ -108,7 +118,7 @@ while ip < len(program):
         ip += 1
         continue
     else:
-        raise RuntimeError(f'missing position at {ip}: {instruction!r}')
+        raise RuntimeError(f'missing direction at {ip}: {instruction!r}')
 
     print(f'{ip=} {instruction=} {is_left=} {deque=}')
 
