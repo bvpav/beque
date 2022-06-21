@@ -1,0 +1,17 @@
+# print the fibonacci sequence
+
+0. 1.
+
+loop:
+    dup. .+
+
+    .dup .100 .>
+    .end .jmpif
+
+    .dup +.
+
+    dup. 100. <.
+    loop. jmpif.
+end:
+
+print.
