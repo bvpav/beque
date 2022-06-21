@@ -1,17 +1,29 @@
-# print the fibonacci sequence
+# print the nth term of the fibonacci sequence
 
+# the first 2 terms of the sequence
 0. 1.
 
+# n
+.1 .argv
+
+# handle the first 2 terms
+.dup .0 .= .ensure_right .jmpif
+.dup .1 .= .end          .jmpif
+.1 .-
+
 loop:
-    dup. .+
+    dup. .movee .+
 
-    .dup .100 .>
-    .end .jmpif
+    --. dup. 0. =.
+    ensure_right. jmpif.
 
-    .dup +.
+    .dup movee. +.
 
-    dup. 100. <.
-    loop. jmpif.
+    .-- .dup .0 .!=
+    .loop .jmpif
+
+    .end .jmp
+ensure_right: .movee
 end:
 
 print.

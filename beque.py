@@ -81,6 +81,14 @@ def eq(is_left):
     push(is_left, 1 if a == b else 0)
 
 
+@func('!=')
+def neq(is_left):
+    b = pop(is_left)
+    a = pop(is_left)
+    push(is_left, 1 if a != b else 0)
+
+
+
 @func('<')
 def lt(is_left):
     b = pop(is_left)
@@ -120,6 +128,18 @@ def dup(is_left):
 def print_func(is_left):
     value = pop(is_left)
     print(value)
+
+
+@func
+def argv(is_left):
+    proc_argv = sys.argv[1:]
+    push(is_left, int(proc_argv[pop(is_left)]))
+
+
+@func
+def movee(is_left):
+    value = pop(is_left)
+    push(not is_left, value)
 
 
 @func
