@@ -8,8 +8,8 @@ programming language, inspired by
 
 ## Syntax
 
-- `.1` - pushes a 1 to the right of the deque
-- `1.` - pushes a 1 to the left of the deque
+- `.1` - pushes a 1 to the left of the deque
+- `1.` - pushes a 1 to the right of the deque
 - `.+` - adds the right two numbers of the deque
 - `+.` - adds the left two numbers of the deque
 
