@@ -16,7 +16,7 @@ programming language, inspired by
 ## Examples
 
 ```beque
-3. .5 .2 sub. .add .print
+3. .5 .2 -. .+ .print
 ```
 
 Output:
